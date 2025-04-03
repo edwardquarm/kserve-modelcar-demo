@@ -3,8 +3,6 @@ FROM registry.access.redhat.com/ubi9/python-311:latest as base
 
 USER root
 
-# add dir model-store
-
 
 # Copy the requirements file
 COPY requirements.txt requirements.txt
@@ -33,8 +31,11 @@ RUN mkdir -p /model-store && torch-model-archiver \
 # Final image containing only the essential model files
 FROM registry.access.redhat.com/ubi9/ubi-micro:9.4
 
+# Make models directory
+RUN mkdir -p /models
+
 # Copy the model archive from the base image
-COPY --from=base /model-store/DISTLBERTClassifier.mar /model-store/
-COPY --from=base /config/config.properties /config/config.properties
+COPY --from=base /model-store/DISTLBERTClassifier.mar /models/model-store/
+COPY --from=base /config/config.properties /models/config.properties
 
 USER 1001
