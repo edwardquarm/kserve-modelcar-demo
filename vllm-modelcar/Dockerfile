@@ -4,6 +4,10 @@ USER root
 
 RUN pip install huggingface-hub
 
+ARG HF_AUTH_TOKEN
+ENV HF_AUTH_TOKEN=${HF_AUTH_TOKEN}
+
+
 # Download the model file from hugging face
 COPY download_model.py .
 
